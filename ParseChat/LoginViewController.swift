@@ -47,6 +47,7 @@ class ViewController: UIViewController {
                     //, let code = PFErrorCode(rawValue: error._code) {code}
                     print(error.localizedDescription)
                 } else {
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     print("User Registered successfully")
                 }
             }
@@ -65,7 +66,7 @@ class ViewController: UIViewController {
                 if let error = error {
                     print("User log in failed: \(error.localizedDescription)")
                 } else {
-                    
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     print("User logged in successfully")
                 }
             }
