@@ -21,7 +21,8 @@ class ChatViewController: UIViewController, UITableViewDataSource{
         ChatTableView.dataSource = self
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.refresh), userInfo: nil, repeats: true)
 
-        // Do any additional setup after loading the view.
+        ChatTableView.rowHeight = UITableViewAutomaticDimension
+        ChatTableView.estimatedRowHeight = 50
     }
     
     override func didReceiveMemoryWarning() {
@@ -33,6 +34,8 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     @IBAction func sendButton(_ sender: Any) {
         let chatMessage = PFObject(className: "Message_fbu2017")
         chatMessage["text"] = chatMessageField.text ?? ""
+        chatMessage["user"] = PFUser.current()
+
         
         chatMessage.saveInBackground { (success, error) in
             if success {
@@ -51,8 +54,16 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ChatTableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         let message = messages?[indexPath.row] //How do we get a message from messages??
+        print(message)
+        if let user = message?["user"] as? PFUser {
+            print(user.username)
+            cell.usernameLabel.text = user.username
+        } else {
+            cell.usernameLabel.text = "🤖"
+        }
         
         cell.chatLabel.text = message?["text"] as! String
+        
         
         return cell
         
@@ -61,6 +72,7 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     func refresh() {
         let query = PFQuery(className: "Message_fbu2017")
         query.order(byDescending: "createdAt")
+        query.includeKey("user")
         query.findObjectsInBackground { (chatMessages: [PFObject]?, error: Error?) in
             self.messages = chatMessages
             self.ChatTableView.reloadData()
