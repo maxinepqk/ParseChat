@@ -54,7 +54,6 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ChatTableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         let message = messages?[indexPath.row] //How do we get a message from messages??
-        print(message)
         if let user = message?["user"] as? PFUser {
             print(user.username)
             cell.usernameLabel.text = user.username
