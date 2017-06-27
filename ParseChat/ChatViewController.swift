@@ -55,7 +55,6 @@ class ChatViewController: UIViewController, UITableViewDataSource{
         let cell = ChatTableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         let message = messages?[indexPath.row] //How do we get a message from messages??
         if let user = message?["user"] as? PFUser {
-            print(user.username)
             cell.usernameLabel.text = user.username
         } else {
             cell.usernameLabel.text = "🤖"
@@ -79,4 +78,16 @@ class ChatViewController: UIViewController, UITableViewDataSource{
         }
 
     }
+    
+    @IBAction func logoutButton(_ sender: Any) {
+        PFUser.logOutInBackground { (error: Error?) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+                print("Logout successful")
+            }
+        }
+    }
+
 }

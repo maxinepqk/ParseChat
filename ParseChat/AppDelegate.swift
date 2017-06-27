@@ -28,8 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let currentUser = PFUser.current() {
                 print("Welcome back \(currentUser.username!) 😊")
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let chatViewController = storyboard.instantiateViewController(withIdentifier: "ChatViewController")
-                window?.rootViewController = chatViewController
+                let chatNavigationController = storyboard.instantiateViewController(withIdentifier: "ChatViewNavigationController") as! UINavigationController
+                window?.rootViewController = chatNavigationController
+             
             }
         }
         
